@@ -16,7 +16,7 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
+    return Inertia::render('Home/Index', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
@@ -30,6 +30,12 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('admin/HomeAdmin');
     })->name('dashboard');
+    Route::get('/categories', function () {
+        return Inertia::render('admin/HomeAdmin');
+    })->name('categories');
+    Route::get('/product', function () {
+        return Inertia::render('admin/HomeAdmin');
+    })->name('products');
 });
