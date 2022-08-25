@@ -1,9 +1,9 @@
 <script setup></script>
 
 <template>
-    <footer class="bg-gray-700 px-28 py-28">
+    <footer class="bg-gray-700 px-32 py-16">
         <div class="flex flex-row justify-between">
-            <div class="flex flex-col">
+            <div class="flex-1 flex flex-col">
                 <h4 class="text-lg font-bold text-white mb-5">Information</h4>
                 <ul class="flex flex-col ml-3">
                     <li class="list-none mb-2">
@@ -36,7 +36,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="flex flex-col">
+            <div class="flex-1 flex flex-col">
                 <h4 class="text-lg font-bold text-white mb-5">Contuct Us</h4>
                 <ul class="flex flex-row ml-3">
                     <li class="list-none mr-5">
@@ -69,7 +69,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="flex flex-col justify-center">
+            <div class="flex-1 flex flex-col justify-center items-center">
                 <img
                     src="https://image.shutterstock.com/image-vector/online-shop-logo-designs-template-260nw-1701936460.jpg"
                     alt="Image Logo"

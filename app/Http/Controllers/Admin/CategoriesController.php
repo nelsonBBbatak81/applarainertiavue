@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Requests\Category\StoreCategoryRequest;
+use Inertia\Inertia;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
@@ -16,17 +18,14 @@ class CategoriesController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Inertia::render('admin/CategoryAdmin', [
+            'categories' => Category::paginate(10)->through(fn($category) => [
+                'id' => $category->id,
+                'title' => $category->title,
+                'slug' => $category->slug,
+                'meta_info' => $category->meta_info
+            ])
+        ]);
     }
 
     /**
@@ -37,7 +36,14 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoryRequest $request)
     {
-        //
+
+        $category = new Category();
+        $category->title = $request->title;
+        $category->slug = Str::slug($request->title, '-');
+        $category->meta_info = $request->meta_info;
+        $category->save();
+
+        return redirect('/categories')->with('message', 'Category has been successfully created!.');
     }
 
     /**

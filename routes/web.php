@@ -3,6 +3,7 @@
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Admin\CategoriesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,9 +33,11 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('admin/HomeAdmin');
     })->name('dashboard');
-    Route::get('/categories', function () {
-        return Inertia::render('admin/HomeAdmin');
-    })->name('categories');
+
+    // path for category admin
+    Route::get('/categories', [CategoriesController::class, 'index'])->name('categories');
+    Route::post('/categories/add', [CategoriesController::class, 'store'])->name('categories-add');
+
     Route::get('/product', function () {
         return Inertia::render('admin/HomeAdmin');
     })->name('products');
