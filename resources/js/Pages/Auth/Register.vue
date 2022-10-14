@@ -126,7 +126,7 @@ const submit = () => {
                 </Link>
 
                 <JetButton
-                    class="ml-4"
+                    classes="ml-4 text-black text-md"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >

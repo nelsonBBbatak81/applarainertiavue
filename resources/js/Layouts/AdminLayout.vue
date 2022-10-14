@@ -16,12 +16,12 @@ defineProps({
     <Head :title="title" />
     <div>
         <div class="flex w-full h-full">
-            <div class="bg-cyan-600 w-96 px-10 py-5">
+            <div class="bg-slate-600 w-2/5 px-10 py-5">
                 <NavAdmin />
             </div>
-            <div class="w-full bg-slate-100 px-5 py-5">
+            <div class="w-full bg-slate-100 px-5 py-5 content">
                 <div
-                    class="flex flex-row justify-end items-end hidden sm:flex sm:items-center sm:ml-6"
+                    class="flex flex-row justify-end items-end py-3 hidden sm:flex sm:items-center sm:ml-6"
                 >
                     <!-- Settings Dropdown -->
                     <div class="ml-3 relative">
@@ -98,12 +98,26 @@ defineProps({
                     </div>
                 </div>
 
-                <JetBanner />
-
-                <slot />
+                <Transition name="page" made="out-in" appear>
+                    <div :key="$page.url">
+                        <JetBanner />
+                        <slot />
+                    </div>
+                </Transition>
             </div>
         </div>
 
         <Footer />
     </div>
 </template>
+<style scoped>
+.content {
+    overflow-x: hidden;
+}
+.page-enter-active {
+    animation: slideInLeft 1s;
+}
+.page-leave-active {
+    animation: slideOutRight 1s;
+}
+</style>

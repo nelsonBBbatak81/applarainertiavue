@@ -11,10 +11,11 @@ const logout = () => {
 <template>
     <div class="flex flex-col justify-center items-center">
         <img
-            src="https://image.shutterstock.com/image-vector/online-shop-logo-designs-template-260nw-1701936460.jpg"
+            :src="$page.props.images.logo"
             alt="Image Logo"
             class="w-20 h-16 mb-5"
         />
+        <p>media-fashion.com</p>
         <h3 class="text-md font-bold mb-5">CV. Bintang Nusantara</h3>
         <p class="text-justify text-md font-normal mb-10">
             Jl. Medan no. 34, Kel. Sigulangulang - Kec. Siantar Utara -

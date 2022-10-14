@@ -25,7 +25,8 @@ class StoreCategoryRequest extends FormRequest
     {
         return [
             'title' => ['required', 'min:5', 'max:100', 'unique:categories'],
-            'meta_info' => ['required', 'min:5', 'max:250']
+            'meta_info' => ['required', 'min:5', 'max:250'],
+            'urlphoto' => ['required', 'mimes:png,jpg,svg,gif', 'max:2048'],
         ];
     }
 }

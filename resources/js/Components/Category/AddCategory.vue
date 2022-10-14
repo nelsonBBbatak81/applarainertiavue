@@ -1,48 +1,69 @@
-//
 <script setup>
-// import { Inertia } from "@inertiajs/inertia";
-// import { useForm } from "@inertiajs/inertia-vue3";
-// import JetButton from "@/Components/Button.vue";
-// import JetLabel from "@/Components/Label.vue";
-// import JetInput from "@/Components/Input.vue";
-
-// defineProps({
-//     backButton: {
-//         type: Function,
-//     },
-//     errors: {
-//         type: Object,
-//     },
-// });
-
-// const form = useForm({
-//     title: "",
-//     meta_info: "",
-// });
-
-// const submit = () => {
-//     Inertia.post("/categories/add", form);
-// };
-//
+import JetButton from "@/Components/Button.vue";
+import JetLabel from "@/Components/Label.vue";
+import JetInput from "@/Components/Input.vue";
+import JetSpinner from "@/Components/Spinner.vue";
+import JetValidationErrors from "@/Components/ValidationErrors.vue";
 </script>
-
+<script>
+export default {
+    props: {
+        backButton: Function,
+        form: Object,
+        previewImage: String,
+        pickFile: Function,
+        submit: Function,
+        isLoading: Boolean,
+    },
+    data() {
+        return {
+            isUpload: false,
+        };
+    },
+    methods: {
+        selectImage() {
+            this.$refs.fileInput.click();
+        },
+        pickFile() {
+            let input = this.$refs.fileInput;
+            let file = input.files;
+            if (file && file[0]) {
+                let reader = new FileReader();
+                reader.onloadstart = (e) => {
+                    this.isUpload = true;
+                    // console.log(e.target.result);
+                    console.log("start");
+                };
+                reader.onload = (e) => {
+                    this.$emit("pickFile", e.target.result);
+                };
+                reader.onloadend = (e) => {
+                    this.isUpload = false;
+                    // console.log(e.target.result);
+                    console.log("end");
+                };
+                reader.readAsDataURL(file[0]);
+                this.$emit("input", file[0]);
+                this.form.urlphoto = file[0];
+            }
+        },
+    },
+};
+</script>
 <template>
     <div>
-        <div v-show="isLoading">
-            <JetSpinner />
-        </div>
-        <div class="flex flex-row justify-end mb-5">
-            <JetButton
-                type="button"
-                v-on:method="$emit('backButton')"
-                classes="bg-stone-600 hover:bg-stone-700 active:bg-stone-900 focus:outline-none focus:border-stone-900 focus:ring focus:ring-stone-300"
-                >Back</JetButton
-            >
-        </div>
         <div class="max-w-md mx-auto">
+            <div class="flex flex-row justify-end mb-5">
+                <JetButton
+                    type="button"
+                    v-on:method="$emit('backButton')"
+                    classes="bg-stone-600 hover:bg-stone-700 active:bg-stone-900 focus:outline-none focus:border-stone-900 focus:ring focus:ring-stone-300"
+                    >Back</JetButton
+                >
+            </div>
             <JetValidationErrors class="mb-4" />
             <h2 class="text-lg font-bold text-center">Add Category</h2>
-            <form @submit.prevent="submit">
+            <form @submit.prevent="$emit('submit')">
                 <div class="mb-3">
                     <JetLabel for="title" value="Title" />
                     <JetInput
@@ -61,55 +82,54 @@
                         class="mt-1 block w-full"
                     ></textarea>
                 </div>
+                <div class="mb-3">
+                    <JetLabel for="Figure" value="Figure" />
+                    <input
+                        ref="fileInput"
+                        type="file"
+                        class="mt-1 block w-full"
+                        @input="pickFile"
+                    />
+                    <div v-if="isUpload">Wait uploading ....</div>
+                    <div
+                        v-if="previewImage !== null"
+                        class="imagePreviewWrapper"
+                        :style="{ 'background-image': `url(${previewImage})` }"
+                        @click="selectImage"
+                    ></div>
+                </div>
                 <div class="bg-red-200 w-full">
-                    <JetButton
+                    <button
                         type="submit"
-                        classes="w-full justify-center bg-teal-500 hover:bg-teal-700 active:bg-teal-900 focus:outline-none focus:border-teal-900 focus:ring focus:ring-teal-300"
-                        >Save</JetButton
+                        class="w-full rounded-md justify-center bg-teal-500 text-md text-white font-bold py-2 hover:bg-teal-700 active:bg-teal-900 focus:outline-none focus:border-teal-900 focus:ring focus:ring-teal-300"
+                        :class="{
+                            'opacity-25':
+                                form.title == null ||
+                                form.meta_info == null ||
+                                form.urlphoto == null,
+                        }"
+                        :disabled="
+                            form.title == null ||
+                            form.meta_info == null ||
+                            form.urlphoto == null
+                        "
                     >
+                        {{ isLoading ? "Wait ..." : "Save" }}
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 </template>
-
-<script>
-import JetButton from "@/Components/Button.vue";
-import JetLabel from "@/Components/Label.vue";
-import JetInput from "@/Components/Input.vue";
-import JetSpinner from "@/Components/Spinner.vue";
-import JetValidationErrors from "@/Components/ValidationErrors.vue";
-
-export default {
-    props: {
-        backButton: Function,
-    },
-    data() {
-        return {
-            form: {
-                title: null,
-                meta_info: null,
-            },
-            isLoading: false,
-        };
-    },
-    methods: {
-        async submit() {
-            this.isLoading = true;
-            await this.$inertia.post("/categories/add", this.form, {
-                preserveScroll: true,
-                onBefore: () => {},
-                onStart: (visit) => {},
-                onSuccess: (page) => {
-                    this.isLoading = false;
-                    this.$emit("backButton");
-                },
-                onError: (errors) => {
-                    this.isLoading = false;
-                },
-            });
-            console.log(this.errors);
-        },
-    },
-};
-</script>
+<style scoped>
+.imagePreviewWrapper {
+    width: 250px;
+    height: 250px;
+    display: block;
+    cursor: pointer;
+    margin: 0 auto 30px;
+    background-size: cover;
+    background-position: center center;
+    transition: all 1s ease-out;
+}
+</style>

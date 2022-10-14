@@ -96,6 +96,14 @@ const submit = () => {
                     Log in
                 </JetButton>
             </div>
+            <div class="flex flex-row mt-4 justify-center items-center">
+                <p>If you do not have any account please</p>
+                <Link
+                    class="underline text-sm text-blue-400 ml-2 hover:text-blue-500"
+                    :href="route('register')"
+                    >Sign Up</Link
+                >
+            </div>
         </form>
     </JetAuthenticationCard>
 </template>
